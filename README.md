@@ -18,15 +18,7 @@ The testbed utility uses pygame for the interface.
 ## Getting Started
 
 ```
-    git clone repository
+    git clone https://github.com/lamegopinto/vertie.git
+    cd vertie.git
     python testbed.py
 ```
-=======
-vertie
-======
-
-2D physics engine
-vertie
-======
-
-2D physics engine
