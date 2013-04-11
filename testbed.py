@@ -1,5 +1,7 @@
 import os
 from os.path import exists
+from copy import copy
+from math import copysign
 from interface.graphical import GraphichalEngine
 from simulation.geometry import *
 from simulation.shapes import *
@@ -17,13 +19,12 @@ except ImportError:
 # Graphichal Engine
 class JumperBall(GraphichalEngine):	
 	lines_xml = 'lines.xml'
+	velocity_start = velocity_end = None
 	def init(self):
 		if not ANDROID:
 			self.world.gravity = Vector(0, 0.2)
 		self.drawing_line = Line(None, None)
 		self.load_lines_from_xml()
-		brokenball = CircleShape(Point(121, 147), 10)
-		self.world.add(brokenball)		
 		if ANDROID:
 			start_ball = CircularBody(Point((100, 100)), 10)
 			self.world.bodies.append(start_ball)
@@ -55,24 +56,45 @@ class JumperBall(GraphichalEngine):
 		if self.drawing_line.A and self.drawing_line.B:
 			line = self.drawing_line
 			pygame.draw.line(self.display, THECOLORS['green'], line.A.pos(), line.B.pos())
+		if self.velocity_start and self.velocity_end:
+			pygame.draw.circle(self.display, THECOLORS['blue'], self.velocity_start.pos(), 20)
+			pygame.draw.circle(self.display, THECOLORS['red'], self.velocity_end.pos(), 10)
+			pygame.draw.line(self.display, THECOLORS['green'], 
+							self.velocity_end.pos(), self.velocity_start.pos())
 
 	def on_MOUSEBUTTONDOWN(self, mouse):
 		to_delete = [shape for shape in self.world.circle_shapes if shape.hit(mouse.point)]
 		if not to_delete and mouse.pressed[-1]:
-			b = CircleShape(mouse.point, 10)
-			self.world.add(b)
+			self.velocity_start = copy(mouse.point)
+			self.velocity_end = copy(mouse.point)
 		elif mouse.pressed[0]:
-			self.drawing_line.A = Point(mouse.x, mouse.y)
+			self.drawing_line.A = copy(mouse.point)
 			self.drawing_line.B = None
 		for shape in to_delete:
 			self.world.remove(shape)
 				
 	def on_MOUSEMOTION(self, mouse):
 		if mouse.pressed[0] and self.drawing_line.A:
-			self.drawing_line.B = Point(mouse.x, mouse.y)
+			self.drawing_line.B = copy(mouse.point)
+		if self.velocity_start:
+			self.velocity_end = copy(mouse.point)
+			delta_x = (self.velocity_end.x - self.velocity_start.x)
+			delta_y = (self.velocity_end.y - self.velocity_start.y)
+			if abs(delta_x) > 40: delta_x = copysign(40, delta_x)
+			if abs(delta_y) > 40: delta_y = copysign(40, delta_y)
+			self.velocity_end.x = self.velocity_start.x + delta_x
+			self.velocity_end.y = self.velocity_start.y + delta_y 
+
 
 	def on_MOUSEBUTTONUP(self, mouse):
-		if self.drawing_line.A and self.drawing_line.B:
+		if self.velocity_start and self.velocity_end:
+			b = CircleShape(mouse.point, 20)
+			delta_x = (self.velocity_end.x - self.velocity_start.x)/5
+			delta_y = (self.velocity_end.y - self.velocity_start.y)/5
+			b.px = mouse.point.x + delta_x;
+			b.py = mouse.point.y + delta_y;
+			self.world.add(b)
+		elif self.drawing_line.A and self.drawing_line.B:
 			self.world.lines.append(self.drawing_line)
 			self.drawing_line = Line(None, None)
 		elif not self.drawing_line.B and mouse.last_pressed[0]:
@@ -84,6 +106,7 @@ class JumperBall(GraphichalEngine):
 					to_delete.append(line)
 			for line in to_delete:
 				self.world.lines.remove(line)	
+		self.velocity_start = self.velocity_end = None
 
 	def on_KEY_s(self):
 		new_fn = self.lines_xml+'.new'

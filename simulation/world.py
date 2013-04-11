@@ -115,6 +115,8 @@ class World:
 				length = contact_point.distance_to(shape.center())
 				target = shape.radius
 				factor = (length-target)/float(length);
+                
+                # Place the circle center before the colision
 				shape.x -= x*factor		
 				shape.y -= y*factor
 				
