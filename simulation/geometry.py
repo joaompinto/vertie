@@ -60,32 +60,5 @@ class Line:
 	def __repr__(self):
 		return "<Line> "+str(self.A.pos())+","+str(self.B.pos())
 	
-	def intersection_point(self, C):
-		""" 
-		Returns (point, in_segement)
-			point - the point from the line which is closer to point C
-			in_segement - True if the point is contained in the line seg
-		Math from http://paulbourke.net/geometry/pointline/ 
-		"""			
-		A, B = self.A, self.B
-		line_length = hypot(A.x - B.x, A.y - B.y)
-		u = (((C.x - A.x ) * ( B.x - A.x )) +
-			((C.y - A.y) * (B.y - A.y))) / ( line_length ** 2 )
-		
-		in_segement = not (u < 0 or u > 1)
-		
-		# Determine point of intersection
-		intersection_x = A.x + u * ( B.x - A.x)
-		intersection_y = A.y + u * ( B.y - A.y)
-		return Point(intersection_x, intersection_y), in_segement
 	
-	def contact_point(self, C):
-		""" Returns the contact point with a circle """
-		p, in_segement = self.intersection_point(C.center())
-		if not in_segement:
-			p = C.center().nearest(self.A, self.B)
-		distance = p.distance_to(C.center())
-		if distance > C.radius:
-			return None
-		else:
-			return p
+

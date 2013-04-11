@@ -49,7 +49,7 @@ class JumperBall(GraphichalEngine):
 	def draw(self):
 		self.display.fill(THECOLORS['black'])
 		for shape in self.world.circle_shapes:
-			pygame.draw.circle(self.display, THECOLORS['red'], shape.center().pos(), shape.radius)
+			pygame.draw.circle(self.display, THECOLORS['blue'], shape.center().pos(), shape.radius)
 		for line in self.world.lines:		
 			pygame.draw.line(self.display, THECOLORS['yellow'], line.A.pos(), line.B.pos())
 		if self.drawing_line.A and self.drawing_line.B:
@@ -79,7 +79,7 @@ class JumperBall(GraphichalEngine):
 			to_delete = []
 			for line in self.world.lines:				
 				MouseCircle = CircleShape(mouse.point, 3)
-				contact_point = line.contact_point(MouseCircle)
+				contact_point = MouseCircle.line_contact(line)
 				if contact_point:
 					to_delete.append(line)
 			for line in to_delete:

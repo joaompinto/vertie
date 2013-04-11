@@ -103,7 +103,7 @@ class World:
 	def colide_with_lines(self, preserve_impulse):
 		for line in self.lines:				
 			for shape in self.circle_shapes:								
-				contact_point = line.contact_point(shape)
+				contact_point = shape.line_contact(line)
 				if contact_point is None:
 					continue
 				

@@ -18,7 +18,10 @@ The testbed utility uses pygame for the interface.
 ## Getting Started
 
 ```
-    git clone https://github.com/lamegopinto/vertie.git
+    git clone https://github.com/joaompinto/vertie.git
     cd vertie.git
     python testbed.py
 ```
+
+## Known issues
+CircleShape to lines collision reaction is broken
