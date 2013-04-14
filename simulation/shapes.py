@@ -30,42 +30,42 @@ from simulation.geometry import Point
 class CircleShape:
     """ Circle shape centered at point P """
     def __init__(self, P, radius):
-    	self.x, self.y, self.radius = P.x, P.y, radius
-    	self.px, self.py = P.x, P.y
-    	self.ax = self.ay = 0
+        self.x, self.y, self.radius = P.x, P.y, radius
+        self.px, self.py = P.x, P.y
+        self.ax = self.ay = 0
     
     def center(self):
-    	return Point(self.x, self.y)
-    	
+        return Point(self.x, self.y)
+        
     def hit(self, P):
-    	length = self.center().distance_to(P)
-    	return length < self.radius
-    				
+        length = self.center().distance_to(P)
+        return length < self.radius
+                    
     def accelerate(self, delta):
-    	self.x += self.ax * delta * delta
-    	self.y += self.ay * delta * delta
-    	self.y += self.ay * delta * delta
-    	self.ax = self.ay = 0
-    	
+        self.x += self.ax * delta * delta
+        self.y += self.ay * delta * delta
+        self.y += self.ay * delta * delta
+        self.ax = self.ay = 0
+        
     def inertia(self):
-    	x, y = self.x*2 - self.px, self.y*2 - self.py
-    	self.px, self.py = self.x, self.y;
-    	self.x, self.y = x, y
+        x, y = self.x*2 - self.px, self.y*2 - self.py
+        self.px, self.py = self.x, self.y;
+        self.x, self.y = x, y
     
     def apply_friction(self, friction):
-    	x = (self.px - self.x)
-    	y = (self.py - self.y)
-    	length = hypot(x, y)
-    	if x <> 0:			
-    		self.ax += (x/length)*friction
-    		if abs(x) < 0.04: # stop on residual acceleration
-    			self.ax = 0
-    			self.px = self.x			
-    	if y <> 0:
-    		self.ay += (y/length)*friction
-    		if abs(y) < 0.04:  # stop on residual acceleration
-    			self.ay = 0
-    			self.py = self.y
+        x = (self.px - self.x)
+        y = (self.py - self.y)
+        length = hypot(x, y)
+        if x <> 0:          
+            self.ax += (x/length)*friction
+            if abs(x) < 0.04: # stop on residual acceleration
+                self.ax = 0
+                self.px = self.x            
+        if y <> 0:
+            self.ay += (y/length)*friction
+            if abs(y) < 0.04:  # stop on residual acceleration
+                self.ay = 0
+                self.py = self.y
                 
     def line_contact(self, line):
         """ Returns the contact point with a Line """

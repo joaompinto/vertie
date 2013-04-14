@@ -22,43 +22,43 @@
   This module provides classes for:
   
   Basic geometric elements:
-	Point, Vector, Line
+    Point, Vector, Line
 """
 from math import sqrt, hypot, pi, sin, cos, atan2
 
 class Point:
 
-	def __init__(self, x, y):
-		self.x, self.y = x, y
-			
-	def distance_to(self, other):
-		return hypot(self.x-other.x, self.y-other.y)
-		
-	def pos(self):
-		""" return position as tuple, useful for some gfx libs """
-		return (int(self.x), int(self.y))
-		
-	def nearest(self, *args):
-		""" """
-		nearest_point = args[0]
-		min_length = hypot(args[0].x - self.x, args[0].y - self.y)
-		for arg in args[1:]:
-			length = hypot(arg.x - self.x, arg.y - self.y)
-			if length < min_length:
-				nearest_point = arg
-		return nearest_point
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+            
+    def distance_to(self, other):
+        return hypot(self.x-other.x, self.y-other.y)
+        
+    def pos(self):
+        """ return position as tuple, useful for some gfx libs """
+        return (int(self.x), int(self.y))
+        
+    def nearest(self, *args):
+        """ """
+        nearest_point = args[0]
+        min_length = hypot(args[0].x - self.x, args[0].y - self.y)
+        for arg in args[1:]:
+            length = hypot(arg.x - self.x, arg.y - self.y)
+            if length < min_length:
+                nearest_point = arg
+        return nearest_point
 
 class Vector(Point):
-	""" For simplicy we assume vectors have origin (0,0) to (PointX, PointY)"""
-	pass
+    """ For simplicy we assume vectors have origin (0,0) to (PointX, PointY)"""
+    pass
 
 class Line:
-	""" Line between point A and B """
-	def __init__(self, A, B):
-		self.A, self.B = A, B
-			
-	def __repr__(self):
-		return "<Line> "+str(self.A.pos())+","+str(self.B.pos())
-	
-	
+    """ Line between point A and B """
+    def __init__(self, A, B):
+        self.A, self.B = A, B
+            
+    def __repr__(self):
+        return "<Line> "+str(self.A.pos())+","+str(self.B.pos())
+    
+    
 
