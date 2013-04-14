@@ -16,7 +16,7 @@ try:
 except ImportError:
     ANDROID = False
     
-# Graphichal Engine
+# Graphical Engine
 class JumperBall(GraphichalEngine): 
     lines_xml = 'lines.xml'
     velocity_start = velocity_end = None
@@ -25,9 +25,6 @@ class JumperBall(GraphichalEngine):
             self.world.gravity = Vector(0, 0.2)
         self.drawing_line = Line(None, None)
         self.load_lines_from_xml()
-        if ANDROID:
-            start_ball = CircularBody(Point((100, 100)), 10)
-            self.world.bodies.append(start_ball)
         
     def load_lines_from_xml(self):
         try:
@@ -41,10 +38,6 @@ class JumperBall(GraphichalEngine):
             self.world.lines.append(l)
         
     def update(self):
-        if ANDROID:
-            x,y,z = android.accelerometer_reading()
-            self.world.y_gravity = x/10
-            self.world.x_gravity = y/10
         self.world.step()
             
     def draw(self):
